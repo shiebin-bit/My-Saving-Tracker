@@ -12,17 +12,11 @@ class _HomePageState extends State<HomePage> {
   TextEditingController targetAmountController = TextEditingController();
   TextEditingController startingBalanceController = TextEditingController();
   TextEditingController savingAmountController = TextEditingController();
-  double result = 0.0;
+  String resultText = '';
+
   FocusNode targetAmountFocus = FocusNode();
   @override
   Widget build(BuildContext context) {
-    String unitLabel;
-    if (frequency == 'Weekly') {
-      unitLabel = 'weeks';
-    } else {
-      unitLabel = 'months';
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page', style: TextStyle(color: Colors.black)),
@@ -144,16 +138,15 @@ class _HomePageState extends State<HomePage> {
                             targetAmountController.clear();
                             startingBalanceController.clear();
                             savingAmountController.clear();
-                            frequency = 'Weekly';
-                            //set focus to age
 
+                            setState(() {
+                              frequency = 'Weekly';
+                              resultText = ' ';
+                            });
                             FocusScope.of(
                               context,
                             ).requestFocus(targetAmountFocus);
                             targetAmountFocus.requestFocus();
-
-                            result = 0.0;
-                            setState(() {});
                           },
                           child: Text('Reset'),
                         ),
@@ -184,10 +177,10 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: Center(
                               child: Text(
-                                result.toString() + '\t' + unitLabel,
+                                resultText,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                  fontSize: 48.0,
+                                  fontSize: 32.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
                                 ),
@@ -212,14 +205,39 @@ class _HomePageState extends State<HomePage> {
     double startingBalance =
         double.tryParse(startingBalanceController.text) ?? 0.0;
     double savingAmount = double.tryParse(savingAmountController.text) ?? 0.0;
-    double calculatedResult = 0.0;
 
-    if (savingAmount > 0 && targetAmount > startingBalance) {
-      calculatedResult = (targetAmount - startingBalance) / savingAmount;
+    if (savingAmount <= 0) {
+      setState(() {
+        resultText = 'Saving amount must be greater than zero.';
+      });
+      return;
+    }
+
+    if (targetAmount <= 0) {
+      setState(() {
+        resultText = 'Target amount must be greater than zero.';
+      });
+      return;
+    }
+
+    if (targetAmount <= startingBalance) {
+      setState(() {
+        resultText = 'Goal already reached!';
+      });
+      return;
+    }
+
+    double calculatedResult = (targetAmount - startingBalance) / savingAmount;
+
+    String unitLabel;
+    if (selectedFrequency == 'Weekly') {
+      unitLabel = 'weeks';
+    } else {
+      unitLabel = 'months';
     }
 
     setState(() {
-      result = calculatedResult;
+      resultText = calculatedResult.toString() + ' ' + unitLabel;
     });
   }
 }
