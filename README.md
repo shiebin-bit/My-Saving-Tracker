@@ -47,11 +47,14 @@ If any of these checks fail, the calculation is stopped, and a user-friendly err
 
 ## Screenshots
 
-- Splash page
+### Splash page
+
 ![Splash Page](assets/screenshots/splashPage.png)
 
-- Home page before calculating
+### Home page before calculating
+
 ![Home Page before calculating](assets/screenshots/homePageBefore.png)
 
-- Home page after calculating
+### Home page after calculating
+
 ![Home Page after calculating](assets/screenshots/homePageAfter.png)
