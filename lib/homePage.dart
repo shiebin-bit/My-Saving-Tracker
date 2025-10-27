@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     setState(() {
-      resultText = calculatedResult.toString() + ' ' + unitLabel;
+      resultText = '$calculatedResult $unitLabel';
     });
   }
 }
